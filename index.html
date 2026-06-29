@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Guess Game</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body onload="initGame()">
+    <div class="main-container">
+        <h2>Guess Game</h2>
+
+        <div style="margin-bottom: 10px">
+            Guess a number between 1 - 20, you have 5 chances.
+        </div>
+
+        <div class="input">
+            <input type="text" id="guess-value" name="guess-value" />
+
+            <button id="guess-btn" onclick="guessNumber()">Guess!</button>
+            <button id="restart-btn" onclick="restartGame()">Restart</button>
+        </div>
+
+        <hr />
+
+        <div id="attempt-text" style="margin-bottom: 10px">
+            Attempt <span id="attempt">0</span>/5
+        </div>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        let target = 0;
+        let attempt = 0;
+        const maxAttempt = 5;
+
+        function initGame() {
+                target = Math.floor(Math.random() * 20) + 1;
+                attempt = 0;
+
+                document.getElementById("guess-value").value = "";
+                document.getElementById("attempt").innerHTML = "0";
+                document.getElementById("result").innerHTML = "";
+
+                document.getElementById("guess-btn").style.display = "inline-block";
+                document.getElementById("restart-btn").style.display = "none";
+
+                document.getElementById("guess-value").focus();
+        }
+
+        function restartGame() {
+            target = Math.floor(Math.random() * 20) + 1;
+            attempt = 0;
+
+            document.getElementById("guess-value").value = "";
+            document.getElementById("attempt").innerHTML = "0";
+            document.getElementById("result").innerHTML = "";
+
+            document.getElementById("restart-btn").style.display = "none";
+            document.getElementById("guess-btn").style.display = "inline-block";
+
+            document.getElementById("guess-value").focus();
+        }
+
+        function isNumeric(value) {
+            return value !== "" && !isNaN(value);
+        }
+
+        function guessNumber() {
+            let input = document.getElementById("guess-value").value;
+
+            if (!isNumeric(input)) {
+                return;
+            }
+
+            let guess = Number(input);
+            attempt++;
+
+            document.getElementById("attempt").innerHTML = attempt;
+
+            if (guess > target) {
+                document.getElementById("result").innerHTML = guess + " is too high";
+            } else if (guess < target) {
+                document.getElementById("result").innerHTML = guess + " is too low";
+            } else {
+                document.getElementById("result").innerHTML = "You WIN";
+                endGame();
+                return;
+            }
+
+            if (attempt >= maxAttempt) {
+                document.getElementById("result").innerHTML = "You LOSE";
+                endGame();
+                return;
+            }
+
+            document.getElementById("guess-value").value = "";
+            document.getElementById("guess-value").focus();
+        }
+
+        function endGame() {
+            document.getElementById("guess-value").value = "";
+            document.getElementById("guess-btn").style.display = "none";
+            document.getElementById("restart-btn").style.display = "inline-block";
+            document.getElementById("guess-value").focus();
+        }
+    </script>
+</body>
+
+</html>
